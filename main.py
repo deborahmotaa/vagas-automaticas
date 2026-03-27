@@ -5,36 +5,44 @@ from datetime import datetime
 import os
 
 def buscar_vagas_links():
-    print("🔎 Iniciando busca de oportunidades...")
+    print("🔎 Iniciando busca turbinada de oportunidades...")
     
-    # Exemplo: Buscando no site de vagas (ajustado para ser leve)
-    # Nota: LinkedIn/Indeed exigem headers para não bloquearem
+    # Lista de termos que você aceita (ampliada para garantir resultados)
+    termos_interesse = [
+        "dados", "data", "ti", "it", "estágio", "estagiário", 
+        "assistente", "auxiliar", "junior", "júnior", "python", "excel"
+    ]
+    
+    # Site de busca (Trabalha Brasil é bom para automação simples)
     url = "https://www.trabalhabrasil.com.br/vagas-vagas-em-sao-paulo-sp/estagio-ti"
     headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"}
     
-    response = requests.get(url, headers=headers)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    
-    novas_vagas = []
-    
-    # Lógica de extração de tags (exemplo para o site Trabalha Brasil)
-    cards = soup.find_all('div', class_='jg-vagas')[:5] # Pega as 5 primeiras
-    
-    for card in cards:
-        titulo = card.find('h2').text.strip()
-        link = "https://www.trabalhabrasil.com.br" + card.find('a')['href']
-        empresa = "Confidencial" # Muitos sites ocultam na vitrine
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        novas_vagas = []
         
-        # Filtro de interesse
-        if any(keyword in titulo.lower() for keyword in ["dados", "ti", "estágio", "assistente"]):
-            novas_vagas.append({
-                "Data": datetime.now().strftime("%d/%m/%Y"),
-                "Título": titulo,
-                "Empresa": empresa,
-                "Link": link
-            })
+        # Encontra os cards de vagas
+        cards = soup.find_all('div', class_='jg-vagas')
+        
+        for card in cards:
+            titulo = card.find('h2').text.strip()
+            link = "https://www.trabalhabrasil.com.br" + card.find('a')['href']
             
-    return novas_vagas
+            # Filtro Dinâmico: Se qualquer palavra da nossa lista estiver no título, a gente quer!
+            if any(termo in titulo.lower() for termo in termos_interesse):
+                novas_vagas.append({
+                    "Data": datetime.now().strftime("%d/%m/%Y"),
+                    "Título": titulo,
+                    "Empresa": "Ver no link",
+                    "Link": link
+                })
+        
+        return novas_vagas
+
+    except Exception as e:
+        print(f"❌ Erro na busca: {e}")
+        return []
 
 def atualizar_base(vagas):
     arquivo = "vagas_consolidado.csv"
@@ -44,15 +52,16 @@ def atualizar_base(vagas):
         df_novas.to_csv(arquivo, index=False, encoding='utf-8-sig')
     else:
         df_existente = pd.read_csv(arquivo)
-        # Evita duplicar links que já salvamos
+        # Remove duplicatas baseadas no Link para não encher a planilha de repetidos
         df_final = pd.concat([df_existente, df_novas]).drop_duplicates(subset=['Link'], keep='first')
         df_final.to_csv(arquivo, index=False, encoding='utf-8-sig')
     
-    print(f"📊 Planilha atualizada! Total de vagas na base: {len(pd.read_csv(arquivo))}")
+    print(f"✅ Sucesso! Total de vagas na sua base: {len(pd.read_csv(arquivo))}")
 
 if __name__ == "__main__":
-    vagas_encontradas = buscar_vagas_links()
-    if vagas_encontradas:
-        atualizar_base(vagas_encontradas)
+    vagas_reais = buscar_vagas_links()
+    
+    if vagas_reais:
+        atualizar_base(vagas_reais)
     else:
-        print("📭 Nenhuma vaga nova compatível hoje.")
+        print("📭 Nenhuma vaga nova encontrada com os filtros atuais.")
