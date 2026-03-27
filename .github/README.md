@@ -22,5 +22,4 @@ Você pode visualizar a planilha de vagas capturadas em tempo real clicando no l
 👉 [Acessar Base de Dados de Vagas](./vagas_consolidado.csv)
 
 ---
-*“A automação é o primeiro passo para uma análise de dados eficiente.”*
-Desenvolvido com carinho por **Deb**. 🚀
+Desenvolvido por **Deborah**. 🚀
