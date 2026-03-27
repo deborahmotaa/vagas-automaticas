@@ -1,17 +1,26 @@
-# 💼 Career Automation Bot
-> Um assistente minimalista para monitoramento de oportunidades em TI e Dados.
+# 🤎 Career Insights & Automation
+> Um assistente autônomo desenvolvido em Python para monitoramento dinâmico de oportunidades em TI e Análise de Dados.
 
 ---
 
-### 🎨 Visual Status
+### 🎨 Visual & Tech Status
 ![Status](https://img.shields.io/badge/Status-Ativo-6F4E37?style=flat-square) 
 ![Language](https://img.shields.io/badge/Python-3.9-C19A6B?style=flat-square)
+![Automation](https://img.shields.io/badge/GitHub_Actions-Automated-D2B48C?style=flat-square)
 
-### 🛠️ O que ele faz?
-Este bot realiza o scraping de plataformas como LinkedIn e Indeed (via proxies/scrapers), filtra por palavras-chave de **Análise de Dados** e **Estágios de TI**, consolidando tudo em uma planilha histórica.
+### 📂 Sobre o Projeto
+Este projeto foi idealizado para otimizar minha transição de carreira para a área de **Dados e TI**. Mais do que um buscador de vagas, ele funciona como um coletor de dados históricos, permitindo identificar tendências de mercado, tecnologias mais exigidas e volume de oportunidades em São Paulo e Remoto.
 
-### 📊 Base de Dados Atualizada
-Acesse aqui a planilha de vagas capturadas: [vagas_consolidado.csv](./vagas_consolidado.csv)
+### 🛠️ Diferenciais Técnicos
+* **Web Scraping Resiliente:** Coleta automatizada utilizando `BeautifulSoup` e `Requests`.
+* **Data Pipeline:** Processamento de dados com `Pandas` para limpeza e remoção de duplicatas.
+* **Automação CI/CD:** O script é executado diariamente às 08:00 AM através do **GitHub Actions**, garantindo que a base de dados esteja sempre fresca sem intervenção manual.
+* **Armazenamento Estruturado:** Os dados são consolidados em um arquivo `.csv` para futuras análises estatísticas.
+
+### 📊 Acompanhe os Resultados
+Você pode visualizar a planilha de vagas capturadas em tempo real clicando no link abaixo:
+👉 [Acessar Base de Dados de Vagas](./vagas_consolidado.csv)
 
 ---
-*Projeto desenvolvido por Deb para automação de rotina e transição de carreira.*
+*“A automação é o primeiro passo para uma análise de dados eficiente.”*
+Desenvolvido com carinho por **Deb**. 🚀
