@@ -1,0 +1,28 @@
+name: Bot de Vagas Diário
+
+on:
+  schedule:
+    - cron: '0 11 * * *' # Roda às 08:00 AM do Brasil todo dia
+  workflow_dispatch:
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Instalar libs
+        run: pip install requests beautifulsoup4 pandas
+      - name: Rodar Script
+        run: python main.py
+      - name: Salvar mudanças na planilha
+        run: |
+          git config --global user.name 'CareerBot'
+          git config --global user.email 'bot@github.com'
+          git add vagas_consolidado.csv
+          git commit -m "Update: Novas vagas encontradas $(date +%d/%m/%Y)" || exit 0
+          git push
